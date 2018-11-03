@@ -1,0 +1,8 @@
+package: github.com/rippinrobr/lunch-n-learn
+import:
+- package: github.com/apex/log
+- package: github.com/dimfeld/httptreemux
+- package: github.com/mattn/go-sqlite3
+- package: github.com/pborman/uuid
+- package: github.com/pkg/errors
+- package: gopkg.in/go-playground/validator.v9
