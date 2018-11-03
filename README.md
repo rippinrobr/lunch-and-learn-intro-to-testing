@@ -1,4 +1,4 @@
-# lunch-and-learn-intro-to-testing
+# Lunch and Learn - Let's Talk About Testing
 This is a sample app for an intro to testing for non-technical co-workers
 
 ## The Colada Lottery 
