@@ -1,2 +1,6 @@
 coladad
 database/colada-lottery.db
+.DS_Store
+bin/
+target/
+wasm-pack.log

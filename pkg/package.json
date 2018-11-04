@@ -1,0 +1,15 @@
+{
+  "name": "colada-lottery",
+  "collaborators": [
+    "Rob Rowe <rrowe@foodlogiq.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "colada_lottery_bg.wasm",
+    "colada_lottery.js",
+    "colada_lottery.d.ts"
+  ],
+  "module": "colada_lottery.js",
+  "types": "colada_lottery.d.ts",
+  "sideEffects": "false"
+}
