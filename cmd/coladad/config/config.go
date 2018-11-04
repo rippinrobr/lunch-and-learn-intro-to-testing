@@ -12,7 +12,7 @@ type Config struct {
 func New() Config {
 	return Config{
 		APIHost:    ":9999",
-		DBConnInfo: "./database/colada-lottery.db",
+		DBConnInfo: "/Users/robertrowe/go/src/github.com/rippinrobr/lunch-n-learn/database/colada-lottery.db",
 		DBType:     "sqlite3",
 	}
 }

@@ -19,9 +19,22 @@ cfg_if! {
 #[wasm_bindgen]
 extern {
     fn alert(s: &str);
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(msg: &str);
 }
 
 #[wasm_bindgen]
 pub fn greet() {
     alert("Hello, colada-lottery!");
+}
+
+#[wasm_bindgen]
+pub fn init() {
+    log("initializing");
+    log("I will fetch the history");
+}
+
+#[wasm_bindgen]
+pub fn draw_barista_and_cleaner() {
+    log("pretend draw")
 }

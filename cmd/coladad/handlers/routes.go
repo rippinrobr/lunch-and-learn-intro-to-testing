@@ -14,11 +14,21 @@ func API(coladaDB *sql.DB, cfg config.Config) http.Handler {
 	// Create the application.
 	app := web.New(middleware.RequestLogger, middleware.ErrorHandler)
 
+	// ============================================================
+	// Colada Drinkers API
 	d := Drinker{
 		DB:  coladaDB,
 		cfg: cfg,
 	}
 	app.Handle("GET", "/v1/drinkers", d.List)
+
+	// ============================================================
+	// The Lottery History API
+	h := History{
+		DB:  coladaDB,
+		cfg: cfg,
+	}
+	app.Handle("GET", "/v1/history/latest", h.GetLatest)
 
 	return app
 }

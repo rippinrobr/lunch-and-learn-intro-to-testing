@@ -60,6 +60,7 @@ func Error(ctx context.Context, w http.ResponseWriter, err error) {
 	switch e := errors.Cause(err).(type) {
 	case AppError:
 		RespondError(ctx, w, e, e.Status)
+		return
 
 	case InvalidError:
 		v := JSONError{
@@ -68,9 +69,10 @@ func Error(ctx context.Context, w http.ResponseWriter, err error) {
 		}
 
 		RespondRaw(ctx, w, v, http.StatusUnprocessableEntity)
-
+		return
 	default:
 		RespondError(ctx, w, ErrInternal, http.StatusInternalServerError)
+		return
 	}
 }
 
@@ -81,7 +83,6 @@ func RespondError(ctx context.Context, w http.ResponseWriter, err error, code in
 
 // RespondRaw sends JSON to the client.
 func RespondRaw(ctx context.Context, w http.ResponseWriter, data interface{}, code int) {
-
 	// Set the status code for the request logger middleware.
 	v := ctx.Value(clContext.KeyValues).(*clContext.Values)
 	v.StatusCode = code

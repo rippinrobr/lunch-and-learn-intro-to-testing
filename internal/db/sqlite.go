@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/apex/log"
 	_ "github.com/mattn/go-sqlite3"
@@ -37,20 +38,23 @@ func GetDrinkers(db *sql.DB) ([]coladas.Drinker, error) {
 	return drinkers, nil
 }
 
-func GetMostRecentHistory(db *sql.DB) (*history.LogEntry, error) {
+func GetPreviousDrawResult(db *sql.DB) (*history.LogEntry, error) {
 	var id int
 	var barista string
 	var cleaner string
+	var drawnAt string
 
-	row := db.QueryRow("SELECT * FROM history order by id desc limit 1")
-	err := row.Scan(&id, &barista, &cleaner)
+	row := db.QueryRow("SELECT id, barista, cleaner, drawn_at FROM history order by id desc limit 1")
+	err := row.Scan(&id, &barista, &cleaner, &drawnAt)
 	if err != nil {
 		return nil, err
 	}
 
+	fmt.Printf("id: '%d' barista: '%s'", id, barista)
 	return &history.LogEntry{
 		ID:      id,
 		Barista: barista,
 		Cleaner: cleaner,
+		DrawnAt: drawnAt,
 	}, nil
 }
