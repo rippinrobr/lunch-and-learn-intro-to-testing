@@ -3,7 +3,7 @@ package activities
 import (
 	"testing"
 
-	"github.com/rippinrobr/lunch-n-learn/internal/history"
+	"github.com/rippinrobr/lunch-n-learn/internal/drawing"
 
 	"github.com/rippinrobr/lunch-n-learn/internal/coladas"
 )
@@ -15,7 +15,7 @@ func TestPickNextBaristaShouldNotChooseThePreviousBarista(t *testing.T) {
 	coladas := []*coladas.Drinker{a, b, c}
 
 	brew := Brew{}
-	lastDraw := history.DrawingResult{
+	lastDraw := drawing.Result{
 		Barista:    c.Name,
 		BaristaID:  c.UID,
 		BaristaImg: c.HeadshotPath,
@@ -32,7 +32,7 @@ func TestPickNextBaristaDoesNotChooseSomeoneWhoDoesntMakeColadas(t *testing.T) {
 	c, _ := coladas.CreateColadaDrinker(3, "c", true, "/img/c.png")
 	d, _ := coladas.CreateColadaDrinker(4, "d", true, "/img/d.png")
 
-	lastDraw := history.DrawingResult{
+	lastDraw := drawing.Result{
 		Barista:    a.Name,
 		BaristaID:  a.UID,
 		BaristaImg: a.HeadshotPath,

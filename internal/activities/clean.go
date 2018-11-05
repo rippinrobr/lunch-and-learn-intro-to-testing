@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/rippinrobr/lunch-n-learn/internal/coladas"
-	"github.com/rippinrobr/lunch-n-learn/internal/history"
+	"github.com/rippinrobr/lunch-n-learn/internal/drawing"
 )
 
 // Clean tracks the coladas who will clean
@@ -15,7 +15,7 @@ type Clean struct {
 }
 
 // PickNextCleaner determines who will clean the cups and other colada paraphernalia
-func (c *Clean) PickNextCleaner(cleaners []*coladas.Drinker, barista *coladas.Drinker, lastDraw *history.DrawingResult) *coladas.Drinker {
+func (c *Clean) PickNextCleaner(cleaners []*coladas.Drinker, barista *coladas.Drinker, lastDraw *drawing.Result) *coladas.Drinker {
 	// This filters out the previous barista, current barista and prevoius cleaner since he/she can't make
 	// them twice in a row
 	potentialCleaners := filterCleaners(cleaners, func(drinker *coladas.Drinker) bool {

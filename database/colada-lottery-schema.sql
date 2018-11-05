@@ -11,7 +11,7 @@ VALUES ('Space Rob', 1, '/img/space-sloth.jpg'),
      ('Emma', 0, '/img/emma.png'),
      ('Robby', 1, '/img/robbie.png');
 
-CREATE TABLE  IF NOT EXISTS history (
+CREATE TABLE  IF NOT EXISTS drawings (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
     barista varchar NOT NULL, 
     baristaId int NOT NULL,

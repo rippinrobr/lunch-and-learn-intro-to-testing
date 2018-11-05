@@ -5,13 +5,12 @@ import (
 	"database/sql"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/apex/log"
 	"github.com/rippinrobr/lunch-n-learn/cmd/coladad/config"
 	"github.com/rippinrobr/lunch-n-learn/internal/activities"
 	"github.com/rippinrobr/lunch-n-learn/internal/db"
-	"github.com/rippinrobr/lunch-n-learn/internal/history"
+	"github.com/rippinrobr/lunch-n-learn/internal/drawing"
 	"github.com/rippinrobr/lunch-n-learn/internal/platform/web"
 )
 
@@ -33,7 +32,7 @@ func (d *Drinker) List(ctx context.Context, w http.ResponseWriter, r *http.Reque
 }
 
 func (d *Drinker) GetBaristaAndCleaner(ctx context.Context, w http.ResponseWriter, r *http.Request, params map[string]string) error {
-	lastDraw, err := db.GetPreviousDrawResult(d.DB)
+	lastDraw, err := db.GetPreviousResult(d.DB)
 	if err != nil {
 		if !strings.Contains(err.Error(), "no rows in result set") {
 			log.Warn("Unable to find previous drawing results")
@@ -41,7 +40,7 @@ func (d *Drinker) GetBaristaAndCleaner(ctx context.Context, w http.ResponseWrite
 			return nil
 		}
 
-		lastDraw = &history.DrawingResult{}
+		lastDraw = &drawing.Result{}
 	}
 
 	drinkers, err := db.GetDrinkers(d.DB)
@@ -58,17 +57,14 @@ func (d *Drinker) GetBaristaAndCleaner(ctx context.Context, w http.ResponseWrite
 	clean := activities.Clean{}
 	cleaner := clean.PickNextCleaner(drinkers, barista, lastDraw)
 
-	le := history.DrawingResult{
-		ID:         1,
-		Barista:    barista.Name,
-		BaristaID:  barista.UID,
-		BaristaImg: barista.HeadshotPath,
-		Cleaner:    cleaner.Name,
-		CleanerID:  cleaner.UID,
-		CleanerImg: cleaner.HeadshotPath,
-		DrawnAt:    time.Now().Format("2006-01-02 15:04:05"),
+	results := drawing.CreateNewResult(barista, cleaner)
+	results, err = db.AddResult(d.DB, results)
+	if err != nil {
+		log.Warn("Unable to add a result to the drawings table: " + err.Error())
+		web.Error(ctx, w, err)
+		return nil
 	}
 
-	web.Respond(ctx, w, le, http.StatusOK)
+	web.Respond(ctx, w, results, http.StatusOK)
 	return nil
 }

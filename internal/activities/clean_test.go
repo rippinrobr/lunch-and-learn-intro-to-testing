@@ -3,7 +3,7 @@ package activities
 import (
 	"testing"
 
-	"github.com/rippinrobr/lunch-n-learn/internal/history"
+	"github.com/rippinrobr/lunch-n-learn/internal/drawing"
 
 	"github.com/rippinrobr/lunch-n-learn/internal/coladas"
 )
@@ -20,11 +20,11 @@ func TestPickNextCleanerShouldNotChooseThePreviousCleanerOrBarista(t *testing.T)
 	cleaners := []*coladas.Drinker{a, b, c, d, e, f}
 
 	clean := Clean{}
-	DrawingResult := history.DrawingResult{
+	Result := drawing.Result{
 		Cleaner:   c.Name,
 		CleanerID: c.UID,
 	}
-	cleaner := clean.PickNextCleaner(cleaners, a, &DrawingResult)
+	cleaner := clean.PickNextCleaner(cleaners, a, &Result)
 	if cleaner.UID == prevCleaner.UID {
 		t.Errorf("The newly selected cleaner '%s' was the previous cleaner '%s'", cleaner.Name, prevCleaner.Name)
 	}

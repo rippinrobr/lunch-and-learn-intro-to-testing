@@ -4,13 +4,13 @@ import (
 	"errors"
 )
 
-//Drinkers People who partake in the drinking of
-//coladas.
+// Drinker models people who partake in the drinking of
+// coladas.
 type Drinker struct {
-	UID          int    `json:"uid"`
+	UID          int64  `json:"uid"`
 	Name         string `json:"name"`
 	CanMake      bool   `json:"canMake"`
-	HeadshotPath string `json:"headshotPath`
+	HeadshotPath string `json:"headshotPath"`
 }
 
 // GetName returns the name of the drinker
@@ -28,9 +28,9 @@ func (c *Drinker) GetHeadshotPath() string {
 	return c.HeadshotPath
 }
 
-// CreateColadaDrinkers is a way to create new drinkers and hopefully new makers
+// CreateColadaDrinker is a way to create new drinkers and hopefully new makers
 // as well
-func CreateColadaDrinker(uid int, name string, canMake bool, headshot string) (*Drinker, error) {
+func CreateColadaDrinker(uid int64, name string, canMake bool, headshot string) (*Drinker, error) {
 	if name == "" {
 		return nil, errors.New("the name parameter cannot be empty")
 	}
