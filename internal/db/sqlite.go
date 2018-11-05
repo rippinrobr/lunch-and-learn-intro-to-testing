@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/apex/log"
 	_ "github.com/mattn/go-sqlite3"
@@ -10,13 +9,13 @@ import (
 	"github.com/rippinrobr/lunch-n-learn/internal/history"
 )
 
-func GetDrinkers(db *sql.DB) ([]coladas.Drinker, error) {
+func GetDrinkers(db *sql.DB) ([]*coladas.Drinker, error) {
 	rows, err := db.Query("SELECT * FROM drinkers order by name")
 	if err != nil {
 		return nil, err
 	}
 
-	drinkers := make([]coladas.Drinker, 0)
+	drinkers := make([]*coladas.Drinker, 0)
 	var uid int
 	var name string
 	var canMake int
@@ -32,7 +31,7 @@ func GetDrinkers(db *sql.DB) ([]coladas.Drinker, error) {
 			log.Infof("Unable to create a Drinker for uid: %d\n", uid)
 			continue
 		}
-		drinkers = append(drinkers, *d)
+		drinkers = append(drinkers, d)
 	}
 
 	return drinkers, nil
@@ -41,20 +40,27 @@ func GetDrinkers(db *sql.DB) ([]coladas.Drinker, error) {
 func GetPreviousDrawResult(db *sql.DB) (*history.LogEntry, error) {
 	var id int
 	var barista string
+	var baristaID int
+	var baristaImg string
 	var cleaner string
+	var cleanerID int
+	var cleanerImg string
 	var drawnAt string
 
-	row := db.QueryRow("SELECT id, barista, cleaner, drawn_at FROM history order by id desc limit 1")
-	err := row.Scan(&id, &barista, &cleaner, &drawnAt)
+	row := db.QueryRow("SELECT id, barista, baristaId, baristaImg, cleaner, cleanerId, cleanerImg, drawn_at FROM history order by id desc limit 1")
+	err := row.Scan(&id, &barista, &baristaID, &baristaImg, &cleaner, &cleanerID, &cleanerImg, &drawnAt)
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Printf("id: '%d' barista: '%s'", id, barista)
 	return &history.LogEntry{
-		ID:      id,
-		Barista: barista,
-		Cleaner: cleaner,
-		DrawnAt: drawnAt,
+		ID:         id,
+		Barista:    barista,
+		BaristaID:  baristaID,
+		BaristaImg: baristaImg,
+		Cleaner:    cleaner,
+		CleanerID:  cleanerID,
+		CleanerImg: cleanerImg,
+		DrawnAt:    drawnAt,
 	}, nil
 }

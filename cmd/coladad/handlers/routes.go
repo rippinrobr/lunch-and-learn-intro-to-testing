@@ -21,6 +21,7 @@ func API(coladaDB *sql.DB, cfg config.Config) http.Handler {
 		cfg: cfg,
 	}
 	app.Handle("GET", "/v1/drinkers", d.List)
+	app.Handle("POST", "/v1/brew", d.GetBaristaAndCleaner)
 
 	// ============================================================
 	// The Lottery History API

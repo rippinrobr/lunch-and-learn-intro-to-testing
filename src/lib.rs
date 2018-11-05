@@ -12,6 +12,7 @@ use futures::{future, Future};
 use js_sys::Promise;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
+use wasm_bindgen::JsValue;
 use wasm_bindgen_futures::future_to_promise;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{Request, RequestInit, RequestMode, Response};
@@ -43,18 +44,6 @@ pub fn greet() {
     alert("Hello, colada-lottery!");
 }
 
-#[wasm_bindgen]
-pub fn init() {
-    log("initializing");
-    log("I will fetch the history");
-    get_previous_results();
-}
-
-#[wasm_bindgen]
-pub fn draw_barista_and_cleaner() {
-    log("pretend draw")
-}
-
 // #[derive(Debug,Serialize)]
 // struct LogEntry {
 // 	id:      i32,
@@ -63,19 +52,22 @@ pub fn draw_barista_and_cleaner() {
 // 	drawnAt: String,
 // }
 
-fn get_previous_results()  -> Promise {
-    log("[get_previous_results] Top");
+#[wasm_bindgen]
+pub fn init() -> Promise {
+    get_previous_results()
+}
+
+#[wasm_bindgen]
+pub fn draw_barista_and_cleaner() -> Promise {
     let mut opts = RequestInit::new();
-    opts.method("GET");
+    opts.method("POST");
     opts.mode(RequestMode::Cors);
 
-    log("[get_previous_results] about to create the request");
     let request = Request::new_with_str_and_init(
-        "http://localhost:9999/v1/history/latest",
+        "http://localhost:9999/v1/brew",
         &opts,
     ).unwrap();
 
-    log("[get_previous_results] setting up headers");
     request
         .headers()
         .set("Accept", "application/json")
@@ -83,26 +75,53 @@ fn get_previous_results()  -> Promise {
 
     let window = web_sys::window().unwrap();
     let request_promise = window.fetch_with_request(&request);
-    log("[get_previous_results] mad the fetch_with_request call");
-
+    
     let future = JsFuture::from(request_promise)
         .and_then(|resp_value| {
-            log("IN the first and_then)")
             // `resp_value` is a `Response` object.
             assert!(resp_value.is_instance_of::<Response>());
             let resp: Response = resp_value.dyn_into().unwrap();
             resp.json()
         }).and_then(|json_value: Promise| {
-            log("In the second and_then");
             // Convert this other `Promise` into a rust `Future`.
             JsFuture::from(json_value)
         }).and_then(|json| {
-            log("In the last and_then");
-            // Use serde to parse the JSON into a struct.
-            //let latest_history: LogEntry = json.into_serde().unwrap();
+            future::ok(json)
+        });
 
-            // Send the `Branch` struct back to JS as an `Object`.
-            log(&format!("{:#?}", json));
+    // Convert this Rust `Future` back into a JS `Promise`.
+    future_to_promise(future)
+
+}
+
+fn get_previous_results()  -> Promise {
+    let mut opts = RequestInit::new();
+    opts.method("GET");
+    opts.mode(RequestMode::Cors);
+
+    let request = Request::new_with_str_and_init(
+        "http://localhost:9999/v1/history/latest",
+        &opts,
+    ).unwrap();
+
+    request
+        .headers()
+        .set("Accept", "application/json")
+        .unwrap();
+
+    let window = web_sys::window().unwrap();
+    let request_promise = window.fetch_with_request(&request);
+    
+    let future = JsFuture::from(request_promise)
+        .and_then(|resp_value| {
+            // `resp_value` is a `Response` object.
+            assert!(resp_value.is_instance_of::<Response>());
+            let resp: Response = resp_value.dyn_into().unwrap();
+            resp.json()
+        }).and_then(|json_value: Promise| {
+            // Convert this other `Promise` into a rust `Future`.
+            JsFuture::from(json_value)
+        }).and_then(|json| {
             future::ok(json)
         });
 

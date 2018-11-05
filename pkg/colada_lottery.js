@@ -33,18 +33,54 @@ export function greet() {
     return wasm.greet();
 }
 
+const stack = [];
+
+const slab = [{ obj: undefined }, { obj: null }, { obj: true }, { obj: false }];
+
+function getObject(idx) {
+    if ((idx & 1) === 1) {
+        return stack[idx >> 1];
+    } else {
+        const val = slab[idx >> 1];
+
+        return val.obj;
+
+    }
+}
+
+let slab_next = slab.length;
+
+function dropRef(idx) {
+
+    idx = idx >> 1;
+    if (idx < 4) return;
+    let obj = slab[idx];
+
+    obj.cnt -= 1;
+    if (obj.cnt > 0) return;
+
+    // If we hit 0 then free up our space in the slab
+    slab[idx] = slab_next;
+    slab_next = idx;
+}
+
+function takeObject(idx) {
+    const ret = getObject(idx);
+    dropRef(idx);
+    return ret;
+}
 /**
-* @returns {void}
+* @returns {any}
 */
 export function init() {
-    return wasm.init();
+    return takeObject(wasm.init());
 }
 
 /**
-* @returns {void}
+* @returns {any}
 */
 export function draw_barista_and_cleaner() {
-    return wasm.draw_barista_and_cleaner();
+    return takeObject(wasm.draw_barista_and_cleaner());
 }
 
 const __widl_f_set_Headers_target = typeof Headers === 'undefined' ? null : Headers.prototype.set || function() {
@@ -59,10 +95,6 @@ function getUint32Memory() {
     return cachegetUint32Memory;
 }
 
-const slab = [{ obj: undefined }, { obj: null }, { obj: true }, { obj: false }];
-
-let slab_next = slab.length;
-
 function addHeapObject(obj) {
     if (slab_next === slab.length) slab.push(slab.length + 1);
     const idx = slab_next;
@@ -72,19 +104,6 @@ function addHeapObject(obj) {
 
     slab[idx] = { obj, cnt: 1 };
     return idx << 1;
-}
-
-const stack = [];
-
-function getObject(idx) {
-    if ((idx & 1) === 1) {
-        return stack[idx >> 1];
-    } else {
-        const val = slab[idx >> 1];
-
-        return val.obj;
-
-    }
 }
 
 export function __widl_f_set_Headers(arg0, arg1, arg2, arg3, arg4, exnptr) {
@@ -286,20 +305,6 @@ export function __wbindgen_object_clone_ref(idx) {
     return idx;
 }
 
-function dropRef(idx) {
-
-    idx = idx >> 1;
-    if (idx < 4) return;
-    let obj = slab[idx];
-
-    obj.cnt -= 1;
-    if (obj.cnt > 0) return;
-
-    // If we hit 0 then free up our space in the slab
-    slab[idx] = slab_next;
-    slab_next = idx;
-}
-
 export function __wbindgen_object_drop_ref(i) {
     dropRef(i);
 }
@@ -364,7 +369,7 @@ export function __wbindgen_cb_drop(i) {
     return 0;
 }
 
-export function __wbindgen_closure_wrapper465(a, b, fi, di, _ignored) {
+export function __wbindgen_closure_wrapper478(a, b, fi, di, _ignored) {
     const f = wasm.__wbg_function_table.get(fi);
     const d = wasm.__wbg_function_table.get(di);
     const cb = function(arg0) {

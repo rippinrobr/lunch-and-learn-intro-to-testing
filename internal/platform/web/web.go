@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	clContext "github.com/rippinrobr/lunch-n-learn/internal/platform/context"
 	"github.com/dimfeld/httptreemux"
 	"github.com/pborman/uuid"
+	clContext "github.com/rippinrobr/lunch-n-learn/internal/platform/context"
 )
 
 // A Handler is a type that handles an http request within our own little mini
@@ -51,6 +51,9 @@ func (a *App) Handle(verb, path string, handler Handler, mw ...Middleware) {
 		// ensure that the trace id is ALWAYS added to the request regardless of
 		// any error occurring or not.
 		w.Header().Set(clContext.TraceIDHeader, v.TraceID)
+
+		// Allow CORS
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 
 		// Call the wrapped handler functions.
 		err := handler(ctx, w, r, params)
