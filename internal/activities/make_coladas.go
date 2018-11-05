@@ -21,7 +21,7 @@ func (b *Brew) GetBarista() string {
 
 // PickNextBarista randomly selects the next prerson to brew
 // the espresso.  The previous barista should not be picked
-func (b *Brew) PickNextBarista(makers []*coladas.Drinker, lastDraw *history.LogEntry) *coladas.Drinker {
+func (b *Brew) PickNextBarista(makers []*coladas.Drinker, lastDraw *history.DrawingResult) *coladas.Drinker {
 	// This filters out the previous barista since he/she can't make
 	// them twice in a row
 	brewers := filterBaristas(makers, func(drinker *coladas.Drinker) bool {

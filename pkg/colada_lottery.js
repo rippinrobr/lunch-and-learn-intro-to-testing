@@ -19,13 +19,6 @@ export function __wbg_alert_7b535868f880270c(arg0, arg1) {
     let varg0 = getStringFromWasm(arg0, arg1);
     alert(varg0);
 }
-
-const __wbg_log_420772b956a38cc5_target = console.log;
-
-export function __wbg_log_420772b956a38cc5(arg0, arg1) {
-    let varg0 = getStringFromWasm(arg0, arg1);
-    __wbg_log_420772b956a38cc5_target(varg0);
-}
 /**
 * @returns {void}
 */

@@ -4,24 +4,27 @@ wasm.init().then((results) => {
     console.log("results", results);
     if (results) {
         if (results.error) {
-            alert(results.error);
+            document.getElementById("error-msg").innerText = results.error;
+            document.getElementById("error-msg").style.display = "block";
         }
     }
 })
 
+document.getElementById("error-msg").addEventListener('click', (evt) => {
+    evt.target.style.display="none";
+});
+
 document.getElementById("lotteryBtn").addEventListener("click", () => {
     wasm.draw_barista_and_cleaner().then((results) => {
-        console.log(results);
-        var logEntry = results.result;
-        console.log(logEntry);
+        var DrawingResult = results.result;
+        
+        document.getElementById("baristaName").innerText =  "Barista: " + DrawingResult.barista;
+        document.getElementById("baristaDrawnAt").innerText = DrawingResult.drawnAt;
+        document.getElementById("baristaHeadshot").setAttribute("src", DrawingResult.baristaImg);
 
-        document.getElementById("baristaName").innerText = logEntry.barista;
-        document.getElementById("baristaDrawnAt").innerText = logEntry.drawnAt;
-        document.getElementById("baristaHeadshot").setAttribute("src", logEntry.baristaImg);
-
-        document.getElementById("cleanerName").innerText = logEntry.cleaner;
-        document.getElementById("cleanerDrawnAt").innerText = logEntry.drawnAt;
-        document.getElementById("cleanerHeadshot").setAttribute("src", "http://localhost:8080"+logEntry.cleanerImg);
+        document.getElementById("cleanerName").innerText = "Cleaner: " + DrawingResult.cleaner;
+        document.getElementById("cleanerDrawnAt").innerText = DrawingResult.drawnAt;
+        document.getElementById("cleanerHeadshot").setAttribute("src", "http://localhost:8080"+DrawingResult.cleanerImg);
         
         document.getElementById("lotteryResultsContainer").style.display = "block";
     });

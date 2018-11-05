@@ -15,7 +15,7 @@ func TestPickNextBaristaShouldNotChooseThePreviousBarista(t *testing.T) {
 	coladas := []*coladas.Drinker{a, b, c}
 
 	brew := Brew{}
-	lastDraw := history.LogEntry{
+	lastDraw := history.DrawingResult{
 		Barista:    c.Name,
 		BaristaID:  c.UID,
 		BaristaImg: c.HeadshotPath,
@@ -32,7 +32,7 @@ func TestPickNextBaristaDoesNotChooseSomeoneWhoDoesntMakeColadas(t *testing.T) {
 	c, _ := coladas.CreateColadaDrinker(3, "c", true, "/img/c.png")
 	d, _ := coladas.CreateColadaDrinker(4, "d", true, "/img/d.png")
 
-	lastDraw := history.LogEntry{
+	lastDraw := history.DrawingResult{
 		Barista:    a.Name,
 		BaristaID:  a.UID,
 		BaristaImg: a.HeadshotPath,

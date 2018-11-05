@@ -35,22 +35,11 @@ cfg_if! {
 #[wasm_bindgen]
 extern {
     fn alert(s: &str);
+
     #[wasm_bindgen(js_namespace = console)]
     fn log(msg: &str);
 }
 
-#[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, colada-lottery!");
-}
-
-// #[derive(Debug,Serialize)]
-// struct LogEntry {
-// 	id:      i32,
-// 	barista: String,
-// 	cleaner: String,
-// 	drawnAt: String,
-// }
 
 #[wasm_bindgen]
 pub fn init() -> Promise {
@@ -100,7 +89,7 @@ fn get_previous_results()  -> Promise {
     opts.mode(RequestMode::Cors);
 
     let request = Request::new_with_str_and_init(
-        "http://localhost:9999/v1/history/latest",
+        "http://localhost:9999/v1/drawings/previous",
         &opts,
     ).unwrap();
 

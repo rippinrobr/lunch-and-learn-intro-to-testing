@@ -1,7 +1,7 @@
 package history
 
-// LogEntry models the resuls of a particular drawing
-type LogEntry struct {
+// DrawingResult models the resuls of a particular drawing
+type DrawingResult struct {
 	ID         int    `json:"id"`
 	Barista    string `json:"barista"`
 	BaristaID  int    `json:"baristaId"`

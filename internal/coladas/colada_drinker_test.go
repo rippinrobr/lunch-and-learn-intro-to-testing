@@ -8,38 +8,30 @@ func TestCreateColadaDrinker(t *testing.T) {
 	name := "tester mctestface"
 	imgPath := "/imgs/tester.png"
 	canMake := true
-	drinker, err := CreateColadaDrinker(name, canMake, imgPath)
+	drinker, err := CreateColadaDrinker(1, name, canMake, imgPath)
 
 	if err != nil {
 		t.Errorf("CreateColadaDrinker err was not nil! err: '%s'", err.Error())
 	}
 
-	if drinker.name != name {
-		t.Errorf("drinker.name '%s' does not equal name: '%s'", drinker.name, name)
+	if drinker.Name != name {
+		t.Errorf("drinker.name '%s' does not equal name: '%s'", drinker.Name, name)
 	}
 
-	if drinker.canMake != canMake {
-		t.Errorf("drinker.canMake '%t' does not equal canMake: '%t'", drinker.canMake, canMake)
+	if drinker.CanMake != canMake {
+		t.Errorf("drinker.canMake '%t' does not equal canMake: '%t'", drinker.CanMake, canMake)
 	}
 
-	if drinker.headshotPath != imgPath {
-		t.Errorf("drinker.headshotPath '%s' does not equal imgPath: '%s'", drinker.headshotPath, imgPath)
+	if drinker.HeadshotPath != imgPath {
+		t.Errorf("drinker.headshotPath '%s' does not equal imgPath: '%s'", drinker.HeadshotPath, imgPath)
 	}
 }
 
 func TestShouldThrowErrorWithEmptyName(t *testing.T) {
-	_, err := CreateColadaDrinker("", false, "/a/path")
+	_, err := CreateColadaDrinker(1, "", false, "/a/path")
 
 	if err == nil {
 		t.Errorf("CreateColadaDrinker should throw an error when empty name is provided")
-	}
-}
-
-func TestShouldThrowErrorWithEmptyImgPath(t *testing.T) {
-	_, err := CreateColadaDrinker("ddd", false, "")
-
-	if err == nil {
-		t.Errorf("CreateColadaDrinker should throw an error when empty imgPath is provided")
 	}
 }
 
@@ -48,7 +40,7 @@ func TestGetNameShouldEqualDrinkersName(t *testing.T) {
 	imgPath := "/imgs/tester.png"
 	canMake := true
 
-	drinker, err := CreateColadaDrinker(name, canMake, imgPath)
+	drinker, err := CreateColadaDrinker(1, name, canMake, imgPath)
 	if err != nil {
 		t.Errorf("An error occurred while creating a drinker")
 	}
@@ -64,7 +56,7 @@ func TestMakesColadasShouldEqualCanMake(t *testing.T) {
 	imgPath := "/imgs/tester.png"
 	canMake := true
 
-	drinker, err := CreateColadaDrinker(name, canMake, imgPath)
+	drinker, err := CreateColadaDrinker(1, name, canMake, imgPath)
 	if err != nil {
 		t.Errorf("An error occurred while creating a drinker")
 	}
@@ -80,7 +72,7 @@ func TestGetHeadshotPathShouldEqualDrinkersHeadshotPath(t *testing.T) {
 	imgPath := "/imgs/tester.png"
 	canMake := true
 
-	drinker, err := CreateColadaDrinker(name, canMake, imgPath)
+	drinker, err := CreateColadaDrinker(1, name, canMake, imgPath)
 	if err != nil {
 		t.Errorf("An error occurred while creating a drinker")
 	}

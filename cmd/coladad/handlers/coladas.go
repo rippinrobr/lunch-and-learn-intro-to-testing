@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -42,7 +41,7 @@ func (d *Drinker) GetBaristaAndCleaner(ctx context.Context, w http.ResponseWrite
 			return nil
 		}
 
-		lastDraw = &history.LogEntry{}
+		lastDraw = &history.DrawingResult{}
 	}
 
 	drinkers, err := db.GetDrinkers(d.DB)
@@ -59,7 +58,7 @@ func (d *Drinker) GetBaristaAndCleaner(ctx context.Context, w http.ResponseWrite
 	clean := activities.Clean{}
 	cleaner := clean.PickNextCleaner(drinkers, barista, lastDraw)
 
-	le := history.LogEntry{
+	le := history.DrawingResult{
 		ID:         1,
 		Barista:    barista.Name,
 		BaristaID:  barista.UID,
@@ -70,7 +69,6 @@ func (d *Drinker) GetBaristaAndCleaner(ctx context.Context, w http.ResponseWrite
 		DrawnAt:    time.Now().Format("2006-01-02 15:04:05"),
 	}
 
-	fmt.Printf("le: %+v\n", le)
 	web.Respond(ctx, w, le, http.StatusOK)
 	return nil
 }

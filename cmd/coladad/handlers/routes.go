@@ -24,12 +24,12 @@ func API(coladaDB *sql.DB, cfg config.Config) http.Handler {
 	app.Handle("POST", "/v1/brew", d.GetBaristaAndCleaner)
 
 	// ============================================================
-	// The Lottery History API
-	h := History{
+	// The Lottery Drawing API
+	h := Drawing{
 		DB:  coladaDB,
 		cfg: cfg,
 	}
-	app.Handle("GET", "/v1/history/latest", h.GetLatest)
+	app.Handle("GET", "/v1/drawings/previous", h.GetLatest)
 
 	return app
 }

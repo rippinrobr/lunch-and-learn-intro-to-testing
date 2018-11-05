@@ -15,7 +15,7 @@ type Clean struct {
 }
 
 // PickNextCleaner determines who will clean the cups and other colada paraphernalia
-func (c *Clean) PickNextCleaner(cleaners []*coladas.Drinker, barista *coladas.Drinker, lastDraw *history.LogEntry) *coladas.Drinker {
+func (c *Clean) PickNextCleaner(cleaners []*coladas.Drinker, barista *coladas.Drinker, lastDraw *history.DrawingResult) *coladas.Drinker {
 	// This filters out the previous barista, current barista and prevoius cleaner since he/she can't make
 	// them twice in a row
 	potentialCleaners := filterCleaners(cleaners, func(drinker *coladas.Drinker) bool {

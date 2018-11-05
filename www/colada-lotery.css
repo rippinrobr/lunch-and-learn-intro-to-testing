@@ -22,3 +22,7 @@ html {
 #lotteryResultsContainer {
     display:none;
 }
+
+#err-msg {
+  cursor: pointer;
+}

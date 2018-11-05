@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 
 	"github.com/apex/log"
 	_ "github.com/mattn/go-sqlite3"
@@ -37,7 +38,7 @@ func GetDrinkers(db *sql.DB) ([]*coladas.Drinker, error) {
 	return drinkers, nil
 }
 
-func GetPreviousDrawResult(db *sql.DB) (*history.LogEntry, error) {
+func GetPreviousDrawResult(db *sql.DB) (*history.DrawingResult, error) {
 	var id int
 	var barista string
 	var baristaID int
@@ -53,7 +54,7 @@ func GetPreviousDrawResult(db *sql.DB) (*history.LogEntry, error) {
 		return nil, err
 	}
 
-	return &history.LogEntry{
+	return &history.DrawingResult{
 		ID:         id,
 		Barista:    barista,
 		BaristaID:  baristaID,
@@ -63,4 +64,8 @@ func GetPreviousDrawResult(db *sql.DB) (*history.LogEntry, error) {
 		CleanerImg: cleanerImg,
 		DrawnAt:    drawnAt,
 	}, nil
+}
+
+func AddDrawResult(db *sql.DB, DrawingResult *history.DrawingResult) error {
+	return errors.New("Not implemented")
 }

@@ -20,11 +20,11 @@ func TestPickNextCleanerShouldNotChooseThePreviousCleanerOrBarista(t *testing.T)
 	cleaners := []*coladas.Drinker{a, b, c, d, e, f}
 
 	clean := Clean{}
-	logEntry := history.LogEntry{
+	DrawingResult := history.DrawingResult{
 		Cleaner:   c.Name,
 		CleanerID: c.UID,
 	}
-	cleaner := clean.PickNextCleaner(cleaners, a, &logEntry)
+	cleaner := clean.PickNextCleaner(cleaners, a, &DrawingResult)
 	if cleaner.UID == prevCleaner.UID {
 		t.Errorf("The newly selected cleaner '%s' was the previous cleaner '%s'", cleaner.Name, prevCleaner.Name)
 	}
