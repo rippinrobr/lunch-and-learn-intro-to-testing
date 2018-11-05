@@ -8,6 +8,6 @@ type LogEntry struct {
 	BaristaImg string `json:"baristaImg"`
 	Cleaner    string `json:"cleaner"`
 	CleanerID  int    `json:"cleanerId"`
-	CleanerImg string `json:"baristaImg"`
+	CleanerImg string `json:"cleanerImg"`
 	DrawnAt    string `json:"drawnAt"`
 }

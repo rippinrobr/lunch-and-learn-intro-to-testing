@@ -9,7 +9,7 @@ VALUES ('Space Rob', 1, '/img/space-sloth.jpg'),
      ('Jonathan', 1, '/img/jonathan.png'),
      ('Sam', 1, '/img/sam.png'),
      ('Emma', 0, '/img/emma.png'),
-     ('Robby', 1, '/img/robby.png');
+     ('Robby', 1, '/img/robbie.png');
 
 CREATE TABLE  IF NOT EXISTS history (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 

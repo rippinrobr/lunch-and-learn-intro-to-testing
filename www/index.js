@@ -18,8 +18,11 @@ document.getElementById("lotteryBtn").addEventListener("click", () => {
         document.getElementById("baristaName").innerText = logEntry.barista;
         document.getElementById("baristaDrawnAt").innerText = logEntry.drawnAt;
         document.getElementById("baristaHeadshot").setAttribute("src", logEntry.baristaImg);
+
         document.getElementById("cleanerName").innerText = logEntry.cleaner;
         document.getElementById("cleanerDrawnAt").innerText = logEntry.drawnAt;
+        document.getElementById("cleanerHeadshot").setAttribute("src", "http://localhost:8080"+logEntry.cleanerImg);
+        
         document.getElementById("lotteryResultsContainer").style.display = "block";
     });
 });

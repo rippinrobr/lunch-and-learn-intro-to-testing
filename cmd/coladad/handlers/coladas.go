@@ -63,7 +63,7 @@ func (d *Drinker) GetBaristaAndCleaner(ctx context.Context, w http.ResponseWrite
 		ID:         1,
 		Barista:    barista.Name,
 		BaristaID:  barista.UID,
-		BaristaImg: barista.HeadshotPath + " image",
+		BaristaImg: barista.HeadshotPath,
 		Cleaner:    cleaner.Name,
 		CleanerID:  cleaner.UID,
 		CleanerImg: cleaner.HeadshotPath,

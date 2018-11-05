@@ -118,8 +118,10 @@ func Respond(ctx context.Context, w http.ResponseWriter, data interface{}, code 
 	payload := Response{
 		Result: data,
 	}
+
 	if len(errs) > 0 {
 		for _, err := range errs {
+			log.Printf("[Respond] ERROR : '%s'\n", err.Error())
 			payload.Errors = append(payload.Errors, errors.Cause(err))
 		}
 	}
