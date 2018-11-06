@@ -84,6 +84,7 @@ type Feature struct {
 	request        *http.Request
 	requestHeaders http.Header
 	response       *httptest.ResponseRecorder
+	singleResult   map[string]interface{}
 }
 
 func (f *Feature) reset() {
@@ -138,6 +139,8 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^a request is made to "([^"]*)" "([^"]*)"$`, f.makeRequest)
 	s.Step(`^the response should be a (\d+) status code$`, f.theResponseShouldBeAStatusCode)
 	s.Step(`^the response body should contain a result with( at [A-Za-z]*)? (\d+) item(s?)`, f.theResponseBodyShouldContainAResultWithAtLeastItem)
+	s.Step(`^the response body should return a single item$`, f.theResponseBodyShouldReturnASingleItem)
+	s.Step(`^the response body should contain the field "([^"]*)"$`, f.theResopnseBodyShouldContainTheField)
 }
 
 func (f *Feature) makeRequest(method, url string) error {
@@ -208,11 +211,44 @@ func (f *Feature) theResponseBodyShouldContainAResultWithAtLeastItem(comparator 
 		Results []interface{} `json:"result"`
 	}{}
 	if err := web.Unmarshal(responseBody, &result); err != nil {
-		return fmt.Errorf("failed while unmarshalling JSON into v3 list result: %s", err.Error())
+		return fmt.Errorf("failed while unmarshalling JSON into list result: %s", err.Error())
 	}
 
 	if !lengthMatches(len(result.Results), n) {
 		return fmt.Errorf("number of items returned should be >= %d, got %d", n, len(result.Results))
+	}
+
+	return nil
+}
+
+func (f *Feature) theResponseBodyShouldReturnASingleItem() error {
+	// Make sure we have a request/response to even check.
+	if f.request == nil {
+		return fmt.Errorf("no request was found- was one made in a previous step?")
+	}
+	if f.response == nil {
+		return fmt.Errorf("no response was found- was a request made in a previous step?")
+	}
+
+	// Read the response body.
+	buffer, _ := ioutil.ReadAll(f.response.Body)
+	f.response.Body = bytes.NewBuffer(buffer) // Reset the body on the response so any subsequent steps can read it too.
+	responseBody := bytes.NewBuffer(buffer)
+
+	result := struct {
+		Results map[string]interface{} `json:"result"`
+	}{}
+	if err := web.Unmarshal(responseBody, &result); err != nil {
+		return fmt.Errorf("failed while unmarshalling JSON into a single object: %s", err.Error())
+	}
+
+	f.singleResult = result.Results
+	return nil
+}
+
+func (f *Feature) theResopnseBodyShouldContainTheField(key string) error {
+	if _, exists := f.singleResult[key]; !exists {
+		return fmt.Errorf("the key '%s' was not found in the returned item", key)
 	}
 
 	return nil

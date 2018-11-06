@@ -53,7 +53,7 @@ pub fn draw_barista_and_cleaner() -> Promise {
     opts.mode(RequestMode::Cors);
 
     let request = Request::new_with_str_and_init(
-        "http://localhost:9999/v1/brew",
+        "http://localhost:9999/v1/drawings",
         &opts,
     ).unwrap();
 

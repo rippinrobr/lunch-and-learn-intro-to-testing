@@ -1,4 +1,4 @@
-coladad
+cmd/coladad/coladad
 database/colada-lottery.db
 .DS_Store
 bin/

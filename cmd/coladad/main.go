@@ -13,9 +13,6 @@ import (
 	"github.com/rippinrobr/lunch-n-learn/cmd/coladad/handlers"
 )
 
-// TODO: Create base resource /coladas
-// GET routes /coladas/drinker  /coladas/cleaner
-// POST route /coladas/brew     /coladas/clean
 func main() {
 
 	// ============================================================
