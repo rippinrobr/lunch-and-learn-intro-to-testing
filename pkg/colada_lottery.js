@@ -1,31 +1,6 @@
 /* tslint:disable */
 import * as wasm from './colada_lottery_bg';
 
-let cachedTextDecoder = new TextDecoder('utf-8');
-
-let cachegetUint8Memory = null;
-function getUint8Memory() {
-    if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
-        cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
-    }
-    return cachegetUint8Memory;
-}
-
-function getStringFromWasm(ptr, len) {
-    return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
-}
-
-export function __wbg_alert_7b535868f880270c(arg0, arg1) {
-    let varg0 = getStringFromWasm(arg0, arg1);
-    alert(varg0);
-}
-/**
-* @returns {void}
-*/
-export function greet() {
-    return wasm.greet();
-}
-
 const stack = [];
 
 const slab = [{ obj: undefined }, { obj: null }, { obj: true }, { obj: false }];
@@ -97,6 +72,20 @@ function addHeapObject(obj) {
 
     slab[idx] = { obj, cnt: 1 };
     return idx << 1;
+}
+
+let cachedTextDecoder = new TextDecoder('utf-8');
+
+let cachegetUint8Memory = null;
+function getUint8Memory() {
+    if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
+        cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
+    }
+    return cachegetUint8Memory;
+}
+
+function getStringFromWasm(ptr, len) {
+    return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
 }
 
 export function __widl_f_set_Headers(arg0, arg1, arg2, arg3, arg4, exnptr) {
@@ -362,7 +351,7 @@ export function __wbindgen_cb_drop(i) {
     return 0;
 }
 
-export function __wbindgen_closure_wrapper478(a, b, fi, di, _ignored) {
+export function __wbindgen_closure_wrapper473(a, b, fi, di, _ignored) {
     const f = wasm.__wbg_function_table.get(fi);
     const d = wasm.__wbg_function_table.get(di);
     const cb = function(arg0) {

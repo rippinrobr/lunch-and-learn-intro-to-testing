@@ -23,7 +23,7 @@
     </div>
 
     <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <div id="error-msg" style="display:none;"" class="alert alert-danger" role="alert"></div>
+      <div id="error-msg" data-test="errMsg" style="display:none;"" class="alert alert-danger" role="alert"></div>
       <h1 class="display-4" data-test="page-title">The Colada Lottery</h1>
       <p class="lead">A tool created to decide who is going to make the next colada and who do the cleaning in peaceful manner.</p>
       <button id="lotteryBtn" data-test="lotteryBtn" type="button" class="btn btn-lg btn-block btn-success">Pick the Barista & Cleaner</button>
@@ -33,20 +33,20 @@
       <div class="card-deck mb-3 text-center">
         <div class="card mb-4 shadow-sm">
           <div class="card-header">
-            <h4 id="baristaName" class="my-0 font-weight-normal">The Barista</h4>
-            <i id="baristaDrawnAt">Drawn at datetime here</i>
+            <h4 id="baristaName" data-test="baristaName" class="my-0 font-weight-normal">The Barista</h4>
+            <i id="baristaDrawnAt" data-test="baristaDrawnAt">Drawn at datetime here</i>
           </div>
           <div class="card-body">
-            <img id="baristaHeadshot" class="card-img-top" src="">
+            <img id="baristaHeadshot" data-test="baristaHeadshot" class="card-img-top" src="">
           </div>
         </div>
         <div class="card mb-4 shadow-sm">
           <div class="card-header">
-            <h4  id="cleanerName" class="my-0 font-weight-normal">The Cleaner</h4>
-            <i id="cleanerDrawnAt">Drawn at datetime here</i>
+            <h4  id="cleanerName" data-test="cleanerName" class="my-0 font-weight-normal">The Cleaner</h4>
+            <i id="cleanerDrawnAt" data-test="cleanerDrawnAt">Drawn at datetime here</i>
           </div>
           <div class="card-body">
-            <img id="cleanerHeadshot" class="card-img-top" src="">
+            <img id="cleanerHeadshot" data-test="cleanerHeadshot" class="card-img-top" src="">
           </div>
         </div>
       </div>
@@ -56,6 +56,7 @@
         </div>
       </footer>
     </div>
+
     <script src="./bootstrap.js"></script>
   </body>
 </html>

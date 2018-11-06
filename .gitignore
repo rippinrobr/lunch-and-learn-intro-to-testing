@@ -4,3 +4,4 @@ database/colada-lottery.db
 bin/
 target/
 wasm-pack.log
+.vscode/
