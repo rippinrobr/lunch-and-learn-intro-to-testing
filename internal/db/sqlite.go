@@ -3,8 +3,8 @@ package db
 import (
 	"database/sql"
 	"errors"
+	"log"
 
-	"github.com/apex/log"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rippinrobr/lunch-n-learn/internal/coladas"
 	"github.com/rippinrobr/lunch-n-learn/internal/drawing"
@@ -34,7 +34,7 @@ func GetDrinkers(db *sql.DB) ([]*coladas.Drinker, error) {
 
 		d, err := coladas.CreateColadaDrinker(uid, name, canMake == 1, headshotPath)
 		if err != nil {
-			log.Infof("Unable to create a Drinker for uid: %d\n", uid)
+			log.Printf("Unable to create a Drinker for uid: %d\n", uid)
 			continue
 		}
 		drinkers = append(drinkers, d)

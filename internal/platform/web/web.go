@@ -2,12 +2,15 @@ package web
 
 import (
 	"context"
+	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/dimfeld/httptreemux"
 	"github.com/pborman/uuid"
+	"github.com/pkg/errors"
 	clContext "github.com/rippinrobr/lunch-n-learn/internal/platform/context"
 )
 
@@ -76,4 +79,22 @@ func generateTraceID(r *http.Request) string {
 		return traceHeader
 	}
 	return uuid.New()
+}
+
+// WrapHandler wraps a standard `http.Handler` into a `web.Handler`
+func WrapHandler(h http.Handler) Handler {
+	return func(ctx context.Context, w http.ResponseWriter, r *http.Request, params map[string]string) error {
+		h.ServeHTTP(w, r)
+		return nil
+	}
+}
+
+// Unmarshal decodes the input to the struct type and checks the
+// fields to verify the value is in a proper state.
+func Unmarshal(r io.Reader, v interface{}) error {
+	if err := json.NewDecoder(r).Decode(v); err != nil {
+		return errors.Wrap(ErrBadRequest, err.Error())
+	}
+
+	return Validate(v)
 }
