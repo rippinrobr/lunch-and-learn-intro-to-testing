@@ -84,7 +84,7 @@ type Feature struct {
 	request        *http.Request
 	requestHeaders http.Header
 	response       *httptest.ResponseRecorder
-	singleResult   map[string]interface{}
+	previousDraw   map[string]interface{}
 }
 
 func (f *Feature) reset() {
@@ -141,6 +141,7 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^the response body should contain a result with( at [A-Za-z]*)? (\d+) item(s?)`, f.theResponseBodyShouldContainAResultWithAtLeastItem)
 	s.Step(`^the response body should return a single item$`, f.theResponseBodyShouldReturnASingleItem)
 	s.Step(`^the response body should contain the field "([^"]*)"$`, f.theResopnseBodyShouldContainTheField)
+	s.Step(`^the "([^"]*)" field does not equal the previous "([^"]*)"$`, f.theFieldDoesNotEqualThePrevious)
 }
 
 func (f *Feature) makeRequest(method, url string) error {
@@ -242,13 +243,45 @@ func (f *Feature) theResponseBodyShouldReturnASingleItem() error {
 		return fmt.Errorf("failed while unmarshalling JSON into a single object: %s", err.Error())
 	}
 
-	f.singleResult = result.Results
+	f.previousDraw = result.Results
 	return nil
 }
 
 func (f *Feature) theResopnseBodyShouldContainTheField(key string) error {
-	if _, exists := f.singleResult[key]; !exists {
+	if _, exists := f.previousDraw[key]; !exists {
 		return fmt.Errorf("the key '%s' was not found in the returned item", key)
+	}
+
+	return nil
+}
+
+func (f *Feature) theFieldDoesNotEqualThePrevious(newField, prevField string) error {
+	if f.request == nil {
+		return fmt.Errorf("no request was found- was one made in a previous step?")
+	}
+	if f.response == nil {
+		return fmt.Errorf("no response was found- was a request made in a previous step?")
+	}
+
+	// Read the response body.
+	buffer, _ := ioutil.ReadAll(f.response.Body)
+	f.response.Body = bytes.NewBuffer(buffer) // Reset the body on the response so any subsequent steps can read it too.
+	responseBody := bytes.NewBuffer(buffer)
+
+	result := struct {
+		Results map[string]interface{} `json:"result"`
+	}{}
+	if err := web.Unmarshal(responseBody, &result); err != nil {
+		return fmt.Errorf("failed while unmarshalling the JSON into the new drawing results: %s", err.Error())
+	}
+	newResult := result.Results
+
+	if newVal, exists := newResult[newField]; exists {
+		if prevVal, exists := f.previousDraw[prevField]; exists {
+			if newVal == prevVal {
+				return fmt.Errorf("The new field %s (%s) has the same value as the previous field '%s' (%s), which is a no-no. ", newField, newVal, prevField, prevVal)
+			}
+		}
 	}
 
 	return nil
