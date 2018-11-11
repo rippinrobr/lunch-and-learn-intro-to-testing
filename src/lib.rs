@@ -49,7 +49,7 @@ pub fn init() -> Promise {
 #[wasm_bindgen]
 pub fn draw_barista_and_cleaner() -> Promise {
     let mut opts = RequestInit::new();
-    opts.method("POST");
+    opts.method("GET");
     opts.mode(RequestMode::Cors);
 
     let request = Request::new_with_str_and_init(

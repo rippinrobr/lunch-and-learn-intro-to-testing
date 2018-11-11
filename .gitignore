@@ -5,3 +5,4 @@ bin/
 target/
 wasm-pack.log
 .vscode/
+node_modules

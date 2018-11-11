@@ -29,7 +29,7 @@ func API(coladaDB *sql.DB, cfg config.Config) http.Handler {
 		cfg: cfg,
 	}
 	app.Handle("GET", "/v1/drawings/previous", h.GetLatest)
-	app.Handle("POST", "/v1/drawings", d.GetBaristaAndCleaner)
+	app.Handle("GET", "/v1/drawings", d.GetBaristaAndCleaner)
 
 	return app
 }

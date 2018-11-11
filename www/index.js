@@ -23,11 +23,6 @@ document.getElementById("lotteryBtn").addEventListener("click", () => {
     });
 });
 
-document.getElementById("drinkersBtn").addEventListener('click', (evt) => {
-    document.getElementById("coladaDrinkersListing").style.display="";
-    document.getElementById("lotteryResultsContainer").style.display = "none";
-});
-
 function displayBaristaAndCleaner(res) {
     document.getElementById("baristaName").innerText =  "Barista: " + res.barista;
     document.getElementById("baristaDrawnAt").innerText = "Drawn at: " + res.drawnAt;
